@@ -1,18 +1,82 @@
 {
+	// https://code.visualstudio.com/docs/editor/workspaces
+	// https://code.visualstudio.com/docs/editor/multi-root-workspaces
+	// https://code.visualstudio.com/docs/editor/variables-reference
+
 	"folders": [
 		{
-			"path": "./"
-		}
+			"path": "."
+		},
 	],
+	// extensions.json section
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",              // common C/C++ support
+			"ms-vscode.cpptools-themes",       // general C/C++ theme
+			"ms-vscode.cmake-tools",  // cmake support
+		],
+		"unwantedRecommendations": [
+		]
+	},
+	// settings.json section
 	"settings": {
-		"files.associations": {
-			"cstdio": "cpp",
-			"cstdarg": "cpp"
+		"files.trimTrailingWhitespace": true,
+		"files.insertFinalNewline": true,
+		"files.trimFinalNewlines": true,
+		"cmake.configureOnOpen": true,
+		"cmake.generator": "Unix Makefiles",
+		//"cmake.generator": "Ninja",
+		"cmake.configureSettings": {
+			"CMAKE_BUILD_TYPE": "${buildType}", // set by cmake: Select Variant"
+			"DISPLAY_DRIVER": "X11", // SDL or X11 (or other for embedded devices)
+			"LVGL_CHOSEN_DEMO": "lv_demo_widgets", // select demo from LVGL library examples, make sure they are enabled in lv_conf.h
+			//"LVGL_CHOSEN_DEMO": "lv_demo_stress",
 		},
-		"search.exclude": {
-			"**/.*": true,
-			"build": true
-		},
-		"search.useIgnoreFiles": false
-	}
+	},
+	// tasks.json section
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"type": "cmake",
+				"label": "Build",
+				"command": "build",
+				"targets": [
+					"all"
+				],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"problemMatcher": {
+					"owner": "cpp",
+					"fileLocation": ["relative", "${workspaceFolder}"],
+					"pattern": {
+						"regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+						"file": 1,
+						"line": 2,
+						"column": 3,
+						"severity": 4,
+						"message": 5
+					}
+				}
+			},
+		],
+	},
+	// launch.json section
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Debug LVGL demo with gdb",
+				"type": "cppdbg",
+				"request": "launch",
+			        "program": "${workspaceFolder}/build/lv_demo",
+				"args": [],
+				"cwd": "${fileDirname}",
+				"preLaunchTask": "Build",
+				"stopAtEntry": false,
+			},
+		],
+	},
 }

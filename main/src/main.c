@@ -34,15 +34,9 @@
  **********************/
 
 /**********************
- *  STATIC PROTOTYPES
- **********************/
-static void hal_init(void);
-
-/**********************
  *  STATIC VARIABLES
  **********************/
 
-static int  monitor_hor_res, monitor_ver_res;
 static bool terminate = false;
 
 /**********************
@@ -53,7 +47,7 @@ static bool terminate = false;
  *   STATIC FUNCTIONS
  **********************/
 
-static void on_close_cb(lv_disp_t * disp)
+static void on_close_cb(void * disp)
 {
     LV_UNUSED(disp);
     terminate = true;
@@ -63,10 +57,11 @@ static void on_close_cb(lv_disp_t * disp)
  * Target dependent initialization of the Hardware Abstraction Layer (HAL)
  * for the Light and Versatile Graphics Library (LVGL)
  */
-static void hal_init(void)
+static lv_disp_t* hal_init(int32_t monitor_hor_res, int32_t monitor_ver_res)
 {
+    lv_disp_t* disp;
 #if LV_USE_SDL
-    lv_disp_t * disp = lv_sdl_window_create(monitor_hor_res, monitor_ver_res);
+    disp = lv_sdl_window_create(monitor_hor_res, monitor_ver_res);
 
     lv_group_t * g = lv_group_create();
     lv_group_set_default(g);
@@ -83,22 +78,13 @@ static void hal_init(void)
     lv_image_set_src(mouse_cursor, &mouse_cursor_icon);
     lv_indev_set_cursor(mouse, mouse_cursor);
 #elif LV_USE_X11
-    lv_disp_t * disp = lv_x11_window_create("titl2", monitor_hor_res, monitor_ver_res);
-
-    lv_group_t * g = lv_group_create();
-    lv_group_set_default(g);
-
+    disp = lv_x11_window_create("LVGL X11 Simulation", monitor_hor_res, monitor_ver_res);
     extern lv_img_dsc_t mouse_cursor_icon;
-    lv_indev_t* mousepointer = lv_x11_mouse_create(disp, &mouse_cursor_icon);
-    lv_indev_set_group(mousepointer, lv_group_get_default());
+    lv_x11_inputs_create(disp, &mouse_cursor_icon);
+    lv_x11_window_set_close_cb(disp, on_close_cb, disp);
 
-    lv_indev_t* mousewheel = lv_x11_mousewheel_create(disp);
-    lv_indev_set_group(mousewheel, lv_group_get_default());
-
-    lv_indev_t* keyboard = lv_x11_keyboard_create(disp);
-    lv_indev_set_group(keyboard, lv_group_get_default());
-    lv_x11_window_set_close_cb(disp, on_close_cb);
 #endif // LV_USE_xxx
+    return disp;
 }
 
 /*
@@ -122,15 +108,15 @@ int main(int argc, char ** argv)
     LV_UNUSED(argc);
     LV_UNUSED(argv);
 
-    monitor_hor_res = 800;
-    monitor_ver_res = 480;
+    int32_t monitor_hor_res = 800;
+    int32_t monitor_ver_res = 480;
     printf("Starting with screen resolution of %dx%d px\n", monitor_hor_res, monitor_ver_res);
 
     /*Initialize LittlevGL*/
     lv_init();
 
     /*Initialize the HAL (display, input devices, tick) for LittlevGL*/
-    hal_init();
+    lv_disp_t* disp = hal_init(monitor_hor_res, monitor_ver_res);
 
     /*call demo function (defined in CMakeLists.txt)*/
     CHOSEN_DEMO();
@@ -140,4 +126,5 @@ int main(int argc, char ** argv)
 		do_loop(NULL);
 		usleep(5000);
 	}
+    lv_display_remove(disp);
 }

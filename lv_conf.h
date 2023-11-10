@@ -226,7 +226,9 @@
 
 /*1: Show CPU usage and FPS count
  * Requires `LV_USE_SYSMON = 1`*/
-#define LV_USE_PERF_MONITOR 1
+#ifndef LV_USE_PERF_MONITOR
+  #define LV_USE_PERF_MONITOR 0
+#endif
 #if LV_USE_PERF_MONITOR
     #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 
@@ -237,7 +239,9 @@
 /*1: Show the used memory and the memory fragmentation
  * Requires `LV_USE_BUILTIN_MALLOC = 1`
  * Requires `LV_USE_SYSMON = 1`*/
-#define LV_USE_MEM_MONITOR 1
+#ifndef LV_USE_MEM_MONITOR
+  #define LV_USE_MEM_MONITOR 0
+#endif
 #if LV_USE_MEM_MONITOR
     #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
 #endif
@@ -667,7 +671,9 @@
 #define LV_USE_SNAPSHOT 0
 
 /*1: Enable system monitor component*/
-#define LV_USE_SYSMON 1
+#ifndef LV_USE_SYSMON
+  #define LV_USE_SYSMON 0
+#endif
 
 /*1: Enable the runtime performance profiler*/
 #define LV_USE_PROFILER 0
@@ -715,7 +721,9 @@
 #endif
 
 /*1: Enable an observer pattern implementation*/
-#define LV_USE_OBSERVER 1
+#ifndef LV_USE_OBSERVER
+  #define LV_USE_OBSERVER 0
+#endif
 /*1: Enable Pinyin input method*/
 /*Requires: lv_keyboard*/
 #define LV_USE_IME_PINYIN 0
@@ -757,20 +765,22 @@
     #define LV_SDL_INCLUDE_PATH    <SDL2/SDL.h>
     #define LV_SDL_RENDER_MODE     LV_DISPLAY_RENDER_MODE_DIRECT   /*LV_DISPLAY_RENDER_MODE_DIRECT is recommended for best performance*/
     #define LV_SDL_BUF_COUNT       1   /*1 or 2*/
-    #define LV_SDL_FULLSCREEN      0    /*1: Make the window full screen by default*/
-    #define LV_SDL_DIRECT_EXIT     1    /*1: Exit the application when all SDL windows are closed*/
+    #define LV_SDL_FULLSCREEN      0   /*1: Make the window full screen by default*/
+    #define LV_SDL_DIRECT_EXIT     1   /*1: Exit the application when all SDL windows are closed*/
 #endif
 
 #ifndef LV_USE_X11
-  #define LV_USE_X11              1
+  #define LV_USE_X11              0
 #endif
 #if LV_USE_X11
-    #define LV_X11_RENDER_MODE   LV_DISPLAY_RENDER_MODE_PARTIAL
-    #define LV_X11_DOUBLE_BUFFER 1
+    #define LV_X11_RENDER_MODE     LV_DISPLAY_RENDER_MODE_PARTIAL
+    #define LV_X11_DOUBLE_BUFFER   1
 #endif
 
 /*Driver for /dev/fb*/
-#define LV_USE_LINUX_FBDEV      0
+#ifndef LV_USE_LINUX_FBDEV
+  #define LV_USE_LINUX_FBDEV      0
+#endif
 #if LV_USE_LINUX_FBDEV
     #define LV_LINUX_FBDEV_BSD           0
     #define LV_LINUX_FBDEV_RENDER_MODE   LV_DISPLAY_RENDER_MODE_PARTIAL
@@ -779,8 +789,9 @@
 #endif
 
 /*Use Nuttx to open window and handle touchscreen*/
-#define LV_USE_NUTTX    0
-
+#ifndef LV_USE_NUTTX
+  #define LV_USE_NUTTX    0
+#endif
 #if LV_USE_NUTTX
     #define LV_USE_NUTTX_LIBUV    0
 
@@ -800,13 +811,19 @@
 #endif
 
 /*Driver for /dev/dri/card*/
-#define LV_USE_LINUX_DRM        0
+#ifndef LV_USE_LINUX_DRM
+  #define LV_USE_LINUX_DRM        0
+#endif
 
 /*Interface for TFT_eSPI*/
-#define LV_USE_TFT_ESPI         0
+#ifndef LV_USE_TFT_ESPI
+  #define LV_USE_TFT_ESPI         0
+#endif
 
 /*Driver for evdev input devices*/
-#define LV_USE_EVDEV    0
+#ifndef LV_USE_EVDEV
+  #define LV_USE_EVDEV    0
+#endif
 
 /*==================
 * EXAMPLES

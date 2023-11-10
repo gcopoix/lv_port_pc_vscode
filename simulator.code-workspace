@@ -11,9 +11,9 @@
 	// extensions.json section
 	"extensions": {
 		"recommendations": [
-			"ms-vscode.cpptools",              // common C/C++ support
-			"ms-vscode.cpptools-themes",       // general C/C++ theme
-			"ms-vscode.cmake-tools",  // cmake support
+			"ms-vscode.cpptools",         // common C/C++ support
+			"ms-vscode.cpptools-themes",  // general C/C++ theme
+			"ms-vscode.cmake-tools",      // cmake support
 		],
 		"unwantedRecommendations": [
 		]
@@ -30,6 +30,9 @@
 			"CMAKE_BUILD_TYPE": "${buildType}", // set by cmake: Select Variant"
 			"DISPLAY_DRIVER": "X11", // SDL or X11 (or other for embedded devices)
 			"LVGL_CHOSEN_DEMO": "lv_demo_widgets", // select demo from LVGL library examples, make sure they are enabled in lv_conf.h
+			//"LVGL_CHOSEN_DEMO": "lv_demo_benchmark",
+			//"LVGL_CHOSEN_DEMO": "lv_demo_keypad_encoder",
+			//"LVGL_CHOSEN_DEMO": "lv_demo_music",
 			//"LVGL_CHOSEN_DEMO": "lv_demo_stress",
 		},
 	},

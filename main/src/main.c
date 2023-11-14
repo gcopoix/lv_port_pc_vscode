@@ -47,9 +47,9 @@ static bool terminate = false;
  *   STATIC FUNCTIONS
  **********************/
 
-static void on_close_cb(void * disp)
+static void on_close_cb(lv_event_t * e)
 {
-    LV_UNUSED(disp);
+    LV_UNUSED(e);
     terminate = true;
 }
 
@@ -81,7 +81,6 @@ static lv_disp_t* hal_init(int32_t monitor_hor_res, int32_t monitor_ver_res)
     disp = lv_x11_window_create("LVGL X11 Simulation", monitor_hor_res, monitor_ver_res);
     extern lv_img_dsc_t mouse_cursor_icon;
     lv_x11_inputs_create(disp, &mouse_cursor_icon);
-    lv_x11_window_set_close_cb(disp, on_close_cb, disp);
 
 #endif // LV_USE_xxx
     return disp;
@@ -117,6 +116,7 @@ int main(int argc, char ** argv)
 
     /*Initialize the HAL (display, input devices, tick) for LittlevGL*/
     lv_disp_t* disp = hal_init(monitor_hor_res, monitor_ver_res);
+    lv_display_add_event(disp, on_close_cb, LV_EVENT_DELETE, disp);
 
     /*call demo function (defined in CMakeLists.txt)*/
     CHOSEN_DEMO();
@@ -126,5 +126,4 @@ int main(int argc, char ** argv)
 		do_loop(NULL);
 		usleep(5000);
 	}
-    lv_display_remove(disp);
 }

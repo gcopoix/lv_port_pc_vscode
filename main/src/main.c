@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include "lvgl/lvgl.h"
 #include "lvgl/demos/lv_demos.h"
+#include "lvgl/examples/lv_examples.h"
 
 /*********************
  *      DEFINES
@@ -47,11 +48,13 @@ static bool terminate = false;
  *   STATIC FUNCTIONS
  **********************/
 
+#if !LV_X11_DIRECT_EXIT
 static void on_close_cb(lv_event_t * e)
 {
     LV_UNUSED(e);
     terminate = true;
 }
+#endif
 
 /*
  * Target dependent initialization of the Hardware Abstraction Layer (HAL)
@@ -108,7 +111,7 @@ int main(int argc, char ** argv)
     LV_UNUSED(argv);
 
     int32_t monitor_hor_res = 800;
-    int32_t monitor_ver_res = 480;
+    int32_t monitor_ver_res = 600;
     printf("Starting with screen resolution of %dx%d px\n", monitor_hor_res, monitor_ver_res);
 
     /*Initialize LittlevGL*/
@@ -116,7 +119,11 @@ int main(int argc, char ** argv)
 
     /*Initialize the HAL (display, input devices, tick) for LittlevGL*/
     lv_disp_t* disp = hal_init(monitor_hor_res, monitor_ver_res);
+#if !LV_X11_DIRECT_EXIT
     lv_display_add_event(disp, on_close_cb, LV_EVENT_DELETE, disp);
+#else
+    (void)disp; // supress unused variable warning
+#endif
 
     /*call demo function (defined in CMakeLists.txt)*/
     CHOSEN_DEMO();

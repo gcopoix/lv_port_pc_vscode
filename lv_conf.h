@@ -773,8 +773,9 @@
   #define LV_USE_X11              0
 #endif
 #if LV_USE_X11
-    #define LV_X11_RENDER_MODE     LV_DISPLAY_RENDER_MODE_PARTIAL
-    #define LV_X11_DOUBLE_BUFFER   1
+    #define LV_X11_DIRECT_EXIT         1
+    #define LV_X11_RENDER_MODE_PARTIAL 1
+    #define LV_X11_DOUBLE_BUFFER       1
 #endif
 
 /*Driver for /dev/fb*/
